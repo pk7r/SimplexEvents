@@ -1,0 +1,9 @@
+name: SimplexEvents
+version: ${project.version}
+main: com.github.pk7r.simplexevents.Main
+api-version: 1.16
+author: pk7r
+description: Event plugin specially created for CraftLife
+website: www.craftlife.com.br
+loadbefore:
+  - Vault
