@@ -1,15 +1,18 @@
 package com.github.pk7r.simplexevents.utils;
 
 import com.github.pk7r.simplexevents.Main;
+import com.github.pk7r.simplexevents.model.EnqEventModel;
 
 public class EnqEventPattern {
 
+    private static final EnqEventModel ev = Main.getEnqEventModel();
+
     public static void setDefault() {
-        Main.getEnqEventModel().setTask(null);
-        Main.getEnqEventModel().getNo().clear();
-        Main.getEnqEventModel().getYes().clear();
-        Main.getEnqEventModel().setEnquete("");
-        Main.getEnqEventModel().setAberto(false);
+        ev.setTask(null);
+        ev.getNo().clear();
+        ev.getYes().clear();
+        ev.setEnquete("");
+        ev.setAberto(false);
     }
 
 }

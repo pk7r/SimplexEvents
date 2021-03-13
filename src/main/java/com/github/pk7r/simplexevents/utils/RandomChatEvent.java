@@ -1,6 +1,7 @@
 package com.github.pk7r.simplexevents.utils;
 
 import com.github.pk7r.simplexevents.Main;
+import com.github.pk7r.simplexevents.model.ChatEventModel;
 import com.github.pk7r.simplexevents.service.BolaoService;
 import com.github.pk7r.simplexevents.service.LoteriaService;
 import com.github.pk7r.simplexevents.service.SpeedchatService;
@@ -9,18 +10,20 @@ import java.util.Random;
 
 public class RandomChatEvent {
 
+    private static final ChatEventModel ev = Main.getChatEventModel();
+
     public static void randomEvent() {
         final Random dice = new Random();
         final int number = dice.nextInt(2);
         switch (number) {
             case 0: {
-                if (!Main.getChatEventModel().isBolaoIniciado()) {
+                if (!ev.isBolaoIniciado()) {
                     BolaoService.run(getRandomInt());
                 } else {
-                    if (!Main.getChatEventModel().isLoteriaIniciado()) {
+                    if (!ev.isLoteriaIniciado()) {
                         LoteriaService.run(getRandomInt());
                     } else {
-                        if (!Main.getChatEventModel().isSpeedChatIniciado()) {
+                        if (!ev.isSpeedChatIniciado()) {
                             SpeedchatService.run(getRandomInt());
                         }
                     }
@@ -28,13 +31,13 @@ public class RandomChatEvent {
                 break;
             }
             case 1: {
-                if (!Main.getChatEventModel().isLoteriaIniciado()) {
+                if (!ev.isLoteriaIniciado()) {
                     LoteriaService.run(getRandomInt());
                 } else {
-                    if (!Main.getChatEventModel().isBolaoIniciado()) {
+                    if (!ev.isBolaoIniciado()) {
                         BolaoService.run(getRandomInt());
                     } else {
-                        if (!Main.getChatEventModel().isSpeedChatIniciado()) {
+                        if (!ev.isSpeedChatIniciado()) {
                             SpeedchatService.run(getRandomInt());
                         }
                     }
@@ -42,13 +45,13 @@ public class RandomChatEvent {
                 break;
             }
             case 2: {
-                if (!Main.getChatEventModel().isSpeedChatIniciado()) {
+                if (!ev.isSpeedChatIniciado()) {
                     SpeedchatService.run(getRandomInt());
                 } else {
-                    if (!Main.getChatEventModel().isBolaoIniciado()) {
+                    if (!ev.isBolaoIniciado()) {
                         BolaoService.run(getRandomInt());
                     } else {
-                        if (!Main.getChatEventModel().isLoteriaIniciado()) {
+                        if (!ev.isLoteriaIniciado()) {
                             LoteriaService.run(getRandomInt());
                         }
                     }

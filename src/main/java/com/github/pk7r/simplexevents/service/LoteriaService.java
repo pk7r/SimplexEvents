@@ -1,6 +1,7 @@
 package com.github.pk7r.simplexevents.service;
 
 import com.github.pk7r.simplexevents.Main;
+import com.github.pk7r.simplexevents.model.ChatEventModel;
 import com.github.pk7r.simplexevents.utils.ChatEventPattern;
 import de.themoep.minedown.MineDown;
 import org.bukkit.Bukkit;
@@ -13,10 +14,13 @@ import java.util.Random;
 
 public class LoteriaService {
 
+    private static final ChatEventModel ev = Main.getChatEventModel();
+    
     public static void onLoterry(CommandSender s, String[] args) {
         Player p = (Player) s;
-            if (!Main.getChatEventModel().isLoteriaIniciado()) {
-                p.spigot().sendMessage(MineDown.parse("&cNão tem nenhuma loteria acontecendo no momento."));
+            if (!ev.isLoteriaIniciado()) {
+                p.spigot().sendMessage(
+                        MineDown.parse("&cNão tem nenhuma loteria acontecendo no momento."));
                 return;
             }
             if (args.length != 1) {
@@ -25,18 +29,19 @@ public class LoteriaService {
             }
             try {
                 int numero = Integer.parseInt(args[0]);
-                if (numero != Main.getChatEventModel().getLoteriaNumeroCorreto()) {
+                if (numero != ev.getLoteriaNumeroCorreto()) {
                     p.spigot().sendMessage(MineDown.parse("&cNúmero incorreto!"));
                     return;
                 }
-                Main.getEcon().depositPlayer(p, Main.getChatEventModel().getLoteriaPremio());
-                Main.getChatEventModel().setLoteriaIniciado(false);
+                Main.getEcon().depositPlayer(p, ev.getLoteriaPremio());
+                ev.setLoteriaIniciado(false);
                 Bukkit.spigot().broadcast(MineDown.parse(""));
                 Bukkit.spigot().broadcast(MineDown.parse("&e&lLoteria finalizada!"));
                 Bukkit.spigot().broadcast(MineDown.parse(""));
                 Bukkit.spigot().broadcast(MineDown.parse("&dGanhador: &f" + p.getName()));
-                Bukkit.spigot().broadcast(MineDown.parse("&dNúmero correto: &f" + Main.getChatEventModel().getLoteriaNumeroCorreto()));
-                Bukkit.spigot().broadcast(MineDown.parse("&dPrêmio: &f" + Main.getChatEventModel().getLoteriaPremio()));
+                Bukkit.spigot().broadcast(MineDown.parse("&dNúmero correto: &f"
+                        + ev.getLoteriaNumeroCorreto()));
+                Bukkit.spigot().broadcast(MineDown.parse("&dPrêmio: &f" + ev.getLoteriaPremio()));
                 Bukkit.spigot().broadcast(MineDown.parse(""));
             } catch (NumberFormatException e) {
                 p.spigot().sendMessage(MineDown.parse("&cDigite um número inteiro válido!"));
@@ -44,13 +49,13 @@ public class LoteriaService {
         }
 
     public static void run(int bet) {
-        if (Main.getChatEventModel().isLoteriaIniciado()) {
+        if (ev.isLoteriaIniciado()) {
             return;
         }
-        Main.getChatEventModel().setLoteriaPremio(bet);
-        Main.getChatEventModel().setLoteriaIniciado(true);
+        ev.setLoteriaPremio(bet);
+        ev.setLoteriaIniciado(true);
         int nmaximo = 50;
-        Main.getChatEventModel().setLoteriaNumeroCorreto(new Random().nextInt(nmaximo));
+        ev.setLoteriaNumeroCorreto(new Random().nextInt(nmaximo));
 
         BukkitTask task = new BukkitRunnable() {
             int ann = 0;
@@ -61,7 +66,7 @@ public class LoteriaService {
                 Bukkit.spigot().broadcast(MineDown.parse("&e&lLoteria aberta!"));
                 Bukkit.spigot().broadcast(MineDown.parse(""));
                 Bukkit.spigot().broadcast(MineDown.parse("&dNúmero máximo: &f" + nmaximo));
-                Bukkit.spigot().broadcast(MineDown.parse("&dPrêmio: &f" + Main.getChatEventModel().getLoteriaPremio()));
+                Bukkit.spigot().broadcast(MineDown.parse("&dPrêmio: &f" + ev.getLoteriaPremio()));
                 Bukkit.spigot().broadcast(MineDown.parse(""));
                 Bukkit.spigot().broadcast(MineDown.parse("&b[[Participar]](suggest_command=/loteria )"));
                 Bukkit.spigot().broadcast(MineDown.parse(""));
@@ -71,8 +76,9 @@ public class LoteriaService {
                     Bukkit.spigot().broadcast(MineDown.parse("&e&lLoteria finalizada!"));
                     Bukkit.spigot().broadcast(MineDown.parse(""));
                     Bukkit.spigot().broadcast(MineDown.parse("&dVencedor: &fNinguém!"));
-                    Bukkit.spigot().broadcast(MineDown.parse("&dNúmero correto: &f" + Main.getChatEventModel().getLoteriaNumeroCorreto()));
-                    Bukkit.spigot().broadcast(MineDown.parse("&dPrêmio: &f" + Main.getChatEventModel().getLoteriaPremio()));
+                    Bukkit.spigot().broadcast(MineDown.parse("&dNúmero correto: &f"
+                            + ev.getLoteriaNumeroCorreto()));
+                    Bukkit.spigot().broadcast(MineDown.parse("&dPrêmio: &f" + ev.getLoteriaPremio()));
                     Bukkit.spigot().broadcast(MineDown.parse(""));
                     ChatEventPattern.setLoteriaDefault();
                     cancel();

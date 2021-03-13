@@ -11,7 +11,7 @@ import org.bukkit.command.CommandSender;
 public class BolaoCommand extends BaseCommand {
 
     @Default @CatchUnknown
-    public void betOnPool(CommandSender s) {
+    public void betCommand(CommandSender s) {
         try {
             BolaoService.onPool(s);
         } catch (Exception e) {

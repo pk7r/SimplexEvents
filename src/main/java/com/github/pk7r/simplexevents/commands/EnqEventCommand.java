@@ -12,7 +12,7 @@ import org.bukkit.command.CommandSender;
 public class EnqEventCommand extends BaseCommand {
 
     @Default @CatchUnknown
-    public void defaultPage(CommandSender s) {
+    public void defaultCommand(CommandSender s) {
         try {
             Main.getEnqEvent().onDefault(s);
         } catch (Exception e) {

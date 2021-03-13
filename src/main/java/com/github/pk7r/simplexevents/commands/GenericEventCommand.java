@@ -15,9 +15,8 @@ public class GenericEventCommand extends BaseCommand {
     private final GenericEvent e = Main.getGenericEvent();
     private final GenericEventModel em = Main.getGenericEventModel();
 
-    @Default
-    @CatchUnknown
-    public void defaultPage(CommandSender s) {
+    @Default @CatchUnknown
+    public void defaultCommand(CommandSender s) {
         Player p = (Player) s;
         if (p.hasPermission("simplexevents.evento.admin")) {
             p.spigot().sendMessage(MineDown.parse(""));
@@ -165,7 +164,7 @@ public class GenericEventCommand extends BaseCommand {
     public void winnerCommand(CommandSender s, String arg) {
         try {
             if (s.hasPermission("simplexevents.evento.admin")) {
-                e.chooseWinner(s, arg);
+                e.onChooseWinner(s, arg);
             } else {
                 s.sendMessage("§cSem permissão.");
             }
@@ -179,7 +178,7 @@ public class GenericEventCommand extends BaseCommand {
         try {
             if (s.hasPermission("simplexevents.evento.admin")) {
                 if (em.isTeam()) {
-                    e.greenWinner(s);
+                    e.onGreenTeamWinner(s);
                 } else {
                     s.sendMessage("§cVocê só pode usar esse comando em um evento entre times.");
                 }
@@ -196,7 +195,7 @@ public class GenericEventCommand extends BaseCommand {
         try {
             if (s.hasPermission("simplexevents.evento.admin")) {
                 if (em.isTeam()) {
-                    e.yellowWinner(s);
+                    e.onYellowTeamWinner(s);
                 } else {
                     s.sendMessage("§cVocê só pode usar esse comando em um evento entre times.");
                 }
@@ -493,5 +492,4 @@ public class GenericEventCommand extends BaseCommand {
             e.printStackTrace();
         }
     }
-
 }

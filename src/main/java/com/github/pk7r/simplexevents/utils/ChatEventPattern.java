@@ -1,30 +1,33 @@
 package com.github.pk7r.simplexevents.utils;
 
 import com.github.pk7r.simplexevents.Main;
+import com.github.pk7r.simplexevents.model.ChatEventModel;
 
 public class ChatEventPattern {
 
+    private static final ChatEventModel ev = Main.getChatEventModel();
+
     public static void setBolaoDefault() {
-        Main.getChatEventModel().setBolaoIniciado(false);
-        Main.getChatEventModel().getBolaoParticipantes().clear();
-        Main.getChatEventModel().setBolaoAcumulado(0);
-        Main.getChatEventModel().setBolaoApostaIndividual(0);
+        ev.setBolaoIniciado(false);
+        ev.getBolaoParticipantes().clear();
+        ev.setBolaoAcumulado(0);
+        ev.setBolaoApostaIndividual(0);
     }
 
     public static void setLoteriaDefault() {
-        Main.getChatEventModel().setLoteriaIniciado(false);
-        Main.getChatEventModel().setLoteriaNumeroCorreto(0);
-        Main.getChatEventModel().setLoteriaPremio(0);
+        ev.setLoteriaIniciado(false);
+        ev.setLoteriaNumeroCorreto(0);
+        ev.setLoteriaPremio(0);
     }
 
     public static void setSorteioDefault() {
-        Main.getChatEventModel().setSorteioIniciado(false);
+        ev.setSorteioIniciado(false);
     }
 
     public static void setSpeedChatDefault() {
-        Main.getChatEventModel().setSpeedChatChars("");
-        Main.getChatEventModel().setSpeedChatPremio(0);
-        Main.getChatEventModel().setSpeedChatIniciado(false);
+        ev.setSpeedChatChars("");
+        ev.setSpeedChatPremio(0);
+        ev.setSpeedChatIniciado(false);
     }
 
 }

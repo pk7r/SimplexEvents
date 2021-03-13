@@ -33,16 +33,23 @@ public class GenericEvent {
         ev.setEventName(builder.toString().trim());
         ev.setCriado(true);
         p.spigot().sendMessage(MineDown.parse(""));
-        p.spigot().sendMessage(MineDown.parse("&eO Evento é com itens próprios? &c[[Definir]](/evento toggle inv) &7(Padrão: NÃO)"));
-        p.spigot().sendMessage(MineDown.parse("&eEste é um evento de times? &c[[Definir]](/evento toggle team) &7(Padrão: NÃO)"));
-        p.spigot().sendMessage(MineDown.parse("&eO PvP é habilitado no time? &c[[Definir]](/evento toggle teampvp) &7(Padrão: NÃO)"));
-        p.spigot().sendMessage(MineDown.parse("&eO PvP é habilitado no evento? &c[[Definir]](/evento toggle pvp) &7(Padrão: NÃO)"));
-        p.spigot().sendMessage(MineDown.parse("&eO Fly é habilitado no evento? &c[[Definir]](/evento toggle fly) &7(Padrão: NÃO)"));
+        p.spigot().sendMessage(MineDown.parse("&eO Evento é com itens próprios?" +
+                " &c[[Definir]](/evento toggle inv) &7(Padrão: NÃO)"));
+        p.spigot().sendMessage(MineDown.parse("&eEste é um evento de times?" +
+                " &c[[Definir]](/evento toggle team) &7(Padrão: NÃO)"));
+        p.spigot().sendMessage(MineDown.parse("&eO PvP é habilitado no time?" +
+                " &c[[Definir]](/evento toggle teampvp) &7(Padrão: NÃO)"));
+        p.spigot().sendMessage(MineDown.parse("&eO PvP é habilitado no evento?" +
+                " &c[[Definir]](/evento toggle pvp) &7(Padrão: NÃO)"));
+        p.spigot().sendMessage(MineDown.parse("&eO Fly é habilitado no evento? " +
+                "&c[[Definir]](/evento toggle fly) &7(Padrão: NÃO)"));
         p.spigot().sendMessage(MineDown.parse(""));
         p.spigot().sendMessage(MineDown.parse("&bDefinir: &d[[Prêmio]](suggest_command=/evento premio)" +
-                " [[Entrada]](/evento set entrada) [[Saída]](/evento set saida) [[Camarote]](/evento set camarote)"));
+                " [[Entrada]](/evento set entrada) [[Saída]](/evento set saida)" +
+                " [[Camarote]](/evento set camarote)"));
         p.spigot().sendMessage(MineDown.parse(""));
-        p.spigot().sendMessage(MineDown.parse("&a[[Iniciar Evento]](/evento iniciar) &6[[Ajuda]](/evento)"));
+        p.spigot().sendMessage(MineDown.parse("&a[[Iniciar Evento]](/evento iniciar) " +
+                "&6[[Ajuda]](/evento)"));
     }
 
     public void onStartEvent(CommandSender s) {
@@ -56,27 +63,34 @@ public class GenericEvent {
             if (ev.getCamarote() != null && ev.getEntrada() != null && ev.getSaida() != null) {
                 ev.setIniciado(true);
                 ev.setTrancado(false);
-                p.spigot().sendMessage(MineDown.parse("&aEvento &f" + ev.getEventName() + " &ainiciado com sucesso!"));
+                p.spigot().sendMessage(MineDown.parse("&aEvento &f"
+                        + ev.getEventName() + " &ainiciado com sucesso!"));
                 BukkitTask annouce = Bukkit.getScheduler().runTaskTimer(plugin, () -> {
                     Bukkit.spigot().broadcast(MineDown.parse(""));
-                    Bukkit.spigot().broadcast(MineDown.parse("&e&lEvento " + ev.getEventName() + " Aberto!"));
+                    Bukkit.spigot().broadcast(MineDown.parse("&e&lEvento "
+                            + ev.getEventName() + " Aberto!"));
                     Bukkit.spigot().broadcast(MineDown.parse(""));
                     if (ev.getPremioItem().getType().equals(Material.AIR)
                             && ev.getPremioMoney() == 0) {
                         Bukkit.spigot().broadcast(MineDown.parse("&bPrêmio: &fNenhum!"));
                     }
                     if (!ev.getPremioItem().getType().equals(Material.AIR) && ev.getPremioMoney() == 0) {
-                        Bukkit.spigot().broadcast(MineDown.parse("&bPrêmio: &f" + ev.getPremioItem().getItemMeta().getDisplayName()));
+                        Bukkit.spigot().broadcast(MineDown.parse("&bPrêmio: &f"
+                                + ev.getPremioItem().getItemMeta().getDisplayName()));
                     }
                     if (ev.getPremioItem().getType().equals(Material.AIR) && ev.getPremioMoney() != 0) {
-                        Bukkit.spigot().broadcast(MineDown.parse("&bPrêmio: &f" + ev.getPremioMoney() + " money"));
+                        Bukkit.spigot().broadcast(MineDown.parse("&bPrêmio: &f"
+                                + ev.getPremioMoney() + " money"));
                     }
                     if (!ev.getPremioItem().getType().equals(Material.AIR) && ev.getPremioMoney() != 0) {
-                        Bukkit.spigot().broadcast(MineDown.parse("&bPrêmios: &f" + ev.getPremioMoney() + " money + " +
+                        Bukkit.spigot().broadcast(MineDown.parse("&bPrêmios: &f"
+                                + ev.getPremioMoney() + " money + " +
                                 ev.getPremioItem().getItemMeta().getDisplayName()));
                     }
                     Bukkit.spigot().broadcast(MineDown.parse(""));
-                    Bukkit.spigot().broadcast(MineDown.parse("&b[[Participar]](/evento entrar) &b[[Assistir]](/evento camarote) &b[[Informações]](/evento info)"));
+                    Bukkit.spigot().broadcast(
+                            MineDown.parse("&b[[Participar]](/evento entrar) " +
+                                    "&b[[Assistir]](/evento camarote) &b[[Info]](/evento info)"));
 
                 }, 1L, 30 * 20);
             } else {
@@ -97,8 +111,10 @@ public class GenericEvent {
             if (ev.isTeam()) {
                 for (Player all : Bukkit.getOnlinePlayers()) {
                     if (ev.getParticipantes().contains(all)) {
-                        ev.getVerde().addAll(ev.getParticipantes().subList(0, (int) (ev.getParticipantes().size() * 0.5)));
-                        if (!ev.getVerde().contains(all) && ev.getParticipantes().contains(all)) ev.getAmarelo().add(all);
+                        ev.getVerde().addAll(ev.getParticipantes().subList(0,
+                                (int) (ev.getParticipantes().size() * 0.5)));
+                        if (!ev.getVerde().contains(all) && ev.getParticipantes().contains(all))
+                            ev.getAmarelo().add(all);
                         all.spigot().sendMessage(MineDown.parse(""));
                         all.spigot().sendMessage(MineDown.parse("&6Os jogadores do evento"));
                         all.spigot().sendMessage(MineDown.parse("&6foram dividos em dois"));
@@ -110,14 +126,17 @@ public class GenericEvent {
                         if (ev.getAmarelo().contains(all)) {
                             all.spigot().sendMessage(MineDown.parse("&6Você está no time &e&lAmarelo"));
                         }
-                        all.spigot().sendMessage(MineDown.parse("&b[[Informações do Evento]](/evento info)"));
+                        all.spigot().sendMessage(MineDown.parse("&b[[Informações do" +
+                                " Evento]](/evento info)"));
                         all.spigot().sendMessage(MineDown.parse(""));
                     }
                 }
             }
             ev.setTrancado(true);
             Bukkit.getScheduler().cancelTasks(plugin);
-            Bukkit.spigot().broadcast(MineDown.parse("&aEvento iniciado e trancado com sucesso! &e[[Assistir]](/camarote) &e[[Informações]](/evento info)"));
+            Bukkit.spigot().broadcast(
+                    MineDown.parse("&aEvento iniciado e trancado com sucesso!" +
+                            " &e[[Assistir]](/camarote) &e[[Info]](/evento info)"));
         } else {
             p.spigot().sendMessage(MineDown.parse("&cNão existe nenhum evento iniciado no momento."));
         }
@@ -178,7 +197,7 @@ public class GenericEvent {
         p.spigot().sendMessage(MineDown.parse(""));
     }
 
-    public void chooseWinner(CommandSender s, String arg) {
+    public void onChooseWinner(CommandSender s, String arg) {
         Player p = (Player) s;
         Player ganhador = Bukkit.getPlayerExact(arg);
         if (ev.isTrancado()) {
@@ -201,13 +220,16 @@ public class GenericEvent {
                     Bukkit.spigot().broadcast(MineDown.parse("&bPrêmio: &fNenhum!"));
                 }
                 if (!ev.getPremioItem().getType().equals(Material.AIR) && ev.getPremioMoney() == 0) {
-                    Bukkit.spigot().broadcast(MineDown.parse("&bPrêmio: &f" + ev.getPremioItem().getItemMeta().getDisplayName()));
+                    Bukkit.spigot().broadcast(MineDown.parse("&bPrêmio: &f"
+                            + ev.getPremioItem().getItemMeta().getDisplayName()));
                 }
                 if (ev.getPremioItem().getType().equals(Material.AIR) && ev.getPremioMoney() != 0) {
-                    Bukkit.spigot().broadcast(MineDown.parse("&bPrêmio: &f" + ev.getPremioMoney() + " money"));
+                    Bukkit.spigot().broadcast(MineDown.parse("&bPrêmio: &f"
+                            + ev.getPremioMoney() + " money"));
                 }
                 if (!ev.getPremioItem().getType().equals(Material.AIR) && ev.getPremioMoney() != 0) {
-                    Bukkit.spigot().broadcast(MineDown.parse("&bPrêmios: &f" + ev.getPremioMoney() + " money + " +
+                    Bukkit.spigot().broadcast(MineDown.parse("&bPrêmios: &f"
+                            + ev.getPremioMoney() + " money + " +
                             ev.getPremioItem().getItemMeta().getDisplayName()));
                 }
                 Bukkit.spigot().broadcast(MineDown.parse(""));
@@ -227,7 +249,7 @@ public class GenericEvent {
         }
     }
 
-    public void greenWinner(CommandSender s) {
+    public void onGreenTeamWinner(CommandSender s) {
         Player p = (Player) s;
         if (ev.isTrancado()) {
             for (Player participantes : Bukkit.getOnlinePlayers()) {
@@ -246,13 +268,16 @@ public class GenericEvent {
                 Bukkit.spigot().broadcast(MineDown.parse("&bPrêmio: &fNenhum!"));
             }
             if (!ev.getPremioItem().getType().equals(Material.AIR) && ev.getPremioMoney() == 0) {
-                Bukkit.spigot().broadcast(MineDown.parse("&bPrêmio: &f" + ev.getPremioItem().getItemMeta().getDisplayName()));
+                Bukkit.spigot().broadcast(MineDown.parse("&bPrêmio: &f"
+                        + ev.getPremioItem().getItemMeta().getDisplayName()));
             }
             if (ev.getPremioItem().getType().equals(Material.AIR) && ev.getPremioMoney() != 0) {
-                Bukkit.spigot().broadcast(MineDown.parse("&bPrêmio: &f" + ev.getPremioMoney() + " money"));
+                Bukkit.spigot().broadcast(MineDown.parse("&bPrêmio: &f"
+                        + ev.getPremioMoney() + " money"));
             }
             if (!ev.getPremioItem().getType().equals(Material.AIR) && ev.getPremioMoney() != 0) {
-                Bukkit.spigot().broadcast(MineDown.parse("&bPrêmios: &f" + ev.getPremioMoney() + " money + " +
+                Bukkit.spigot().broadcast(MineDown.parse("&bPrêmios: &f"
+                        + ev.getPremioMoney() + " money + " +
                         ev.getPremioItem().getItemMeta().getDisplayName()));
             }
             Bukkit.spigot().broadcast(MineDown.parse(""));
@@ -275,7 +300,7 @@ public class GenericEvent {
         }
     }
 
-    public void yellowWinner(CommandSender s) {
+    public void onYellowTeamWinner(CommandSender s) {
         Player p = (Player) s;
         if (ev.isTrancado()) {
             for (Player participantes : Bukkit.getOnlinePlayers()) {
@@ -294,13 +319,16 @@ public class GenericEvent {
                 Bukkit.spigot().broadcast(MineDown.parse("&bPrêmio: &fNenhum!"));
             }
             if (!ev.getPremioItem().getType().equals(Material.AIR) && ev.getPremioMoney() == 0) {
-                Bukkit.spigot().broadcast(MineDown.parse("&bPrêmio: &f" + ev.getPremioItem().getItemMeta().getDisplayName()));
+                Bukkit.spigot().broadcast(MineDown.parse("&bPrêmio: &f"
+                        + ev.getPremioItem().getItemMeta().getDisplayName()));
             }
             if (ev.getPremioItem().getType().equals(Material.AIR) && ev.getPremioMoney() != 0) {
-                Bukkit.spigot().broadcast(MineDown.parse("&bPrêmio: &f" + ev.getPremioMoney() + " money"));
+                Bukkit.spigot().broadcast(MineDown.parse("&bPrêmio: &f"
+                        + ev.getPremioMoney() + " money"));
             }
             if (!ev.getPremioItem().getType().equals(Material.AIR) && ev.getPremioMoney() != 0) {
-                Bukkit.spigot().broadcast(MineDown.parse("&bPrêmios: &f" + ev.getPremioMoney() + " money + " +
+                Bukkit.spigot().broadcast(MineDown.parse("&bPrêmios: &f"
+                        + ev.getPremioMoney() + " money + " +
                         ev.getPremioItem().getItemMeta().getDisplayName()));
             }
             Bukkit.spigot().broadcast(MineDown.parse(""));
@@ -360,10 +388,11 @@ public class GenericEvent {
             }
             for (Player participantes : Bukkit.getOnlinePlayers()) {
                 if (ev.getParticipantes().contains(participantes)) {
-                    participantes.spigot().sendMessage(MineDown.parse("&d[Evento] " + builder.toString().trim()));
-                    p.spigot().sendMessage(MineDown.parse("&d[Evento] " + builder.toString().trim()));
+                    participantes.spigot().sendMessage(
+                            MineDown.parse("&d[Evento] " + builder.toString().trim()));
                 }
             }
+            p.spigot().sendMessage(MineDown.parse("&d[Evento] " + builder.toString().trim()));
         } else {
             p.spigot().sendMessage(MineDown.parse("&cNão existe nenhum evento criado no momento."));
         }
@@ -376,7 +405,8 @@ public class GenericEvent {
             for (Player participantes : Bukkit.getOnlinePlayers()) {
                 if (ev.getParticipantes().contains(participantes)) {
                     participantes.teleport(l);
-                    participantes.spigot().sendMessage(MineDown.parse("&aVocê foi teleportado no evento."));
+                    participantes.spigot().sendMessage(
+                            MineDown.parse("&aVocê foi teleportado no evento."));
                 }
             }
             p.spigot().sendMessage(MineDown.parse("&aVocê teleportou os jogadores no evento"));
@@ -393,7 +423,8 @@ public class GenericEvent {
                 if (ev.getParticipantes().contains(participantes)) {
                     if (ev.getVerde().contains(participantes)) {
                         participantes.teleport(l);
-                        participantes.spigot().sendMessage(MineDown.parse("&aVocê foi teleportado no evento."));
+                        participantes.spigot().sendMessage(
+                                MineDown.parse("&aVocê foi teleportado no evento."));
                     }
                 }
             }
@@ -411,7 +442,8 @@ public class GenericEvent {
                 if (ev.getParticipantes().contains(participantes)) {
                     if (ev.getAmarelo().contains(participantes)) {
                         participantes.teleport(l);
-                        participantes.spigot().sendMessage(MineDown.parse("&aVocê foi teleportado no evento."));
+                        participantes.spigot().sendMessage(
+                                MineDown.parse("&aVocê foi teleportado no evento."));
                     }
                 }
             }
@@ -429,15 +461,23 @@ public class GenericEvent {
                     if (ev.getParticipantes().contains(participantes)) {
                         if (!p.getInventory().getItemInMainHand().getType().equals(Material.AIR)) {
                             participantes.getInventory().addItem(p.getInventory().getItemInMainHand());
-                            participantes.spigot().sendMessage(MineDown.parse("&aVocê recebeu um item do evento: &f" + p.getInventory().getItemInMainHand().getItemMeta().getDisplayName()));
+                            participantes.spigot().sendMessage(
+                                    MineDown.parse("&aVocê recebeu um item do evento: &f"
+                                            + p.getInventory().getItemInMainHand()
+                                            .getItemMeta().getDisplayName()));
                         } else {
-                            p.spigot().sendMessage(MineDown.parse("&cColoque um item na sua mão para dar no evento."));
+                            p.spigot().sendMessage(
+                                    MineDown.parse("&cColoque um item na sua mão."));
                         }
                     }
                 }
-                p.spigot().sendMessage(MineDown.parse("&aVocê deu um item para os jogadores do evento: &f" + p.getInventory().getItemInMainHand().getItemMeta().getDisplayName()));
+                p.spigot().sendMessage(
+                        MineDown.parse("&aVocê deu um item para os jogadores do evento: &f"
+                                + p.getInventory().getItemInMainHand()
+                                .getItemMeta().getDisplayName()));
             } else {
-                p.spigot().sendMessage(MineDown.parse("&cVocê não pode dar itens em um evento que os jogadores podem entrar com itens próprios."));
+                p.spigot().sendMessage(
+                        MineDown.parse("&cVocê não pode dar itens em um evento com itens próprios."));
             }
         } else {
             p.spigot().sendMessage(MineDown.parse("&cNão existe nenhum evento iniciado no momento."));
@@ -453,16 +493,23 @@ public class GenericEvent {
                         if (ev.getVerde().contains(participantes)) {
                             if (!p.getInventory().getItemInMainHand().getType().equals(Material.AIR)) {
                                 participantes.getInventory().addItem(p.getInventory().getItemInMainHand());
-                                participantes.spigot().sendMessage(MineDown.parse("&aVocê recebeu um item do evento: &f" + p.getInventory().getItemInMainHand().getItemMeta().getDisplayName()));
+                                participantes.spigot().sendMessage(
+                                        MineDown.parse("&aVocê recebeu um item do evento: &f"
+                                                + p.getInventory().getItemInMainHand()
+                                                .getItemMeta().getDisplayName()));
                             } else {
-                                p.spigot().sendMessage(MineDown.parse("&cColoque um item na sua mão para dar no evento."));
+                                p.spigot().sendMessage(
+                                        MineDown.parse("&cColoque um item na sua mão."));
                             }
                         }
                     }
                 }
-                p.spigot().sendMessage(MineDown.parse("&aVocê deu um item para os jogadores do evento: &f" + p.getInventory().getItemInMainHand().getItemMeta().getDisplayName()));
+                p.spigot().sendMessage(
+                        MineDown.parse("&aVocê deu um item para os jogadores do evento: &f"
+                                + p.getInventory().getItemInMainHand().getItemMeta().getDisplayName()));
             } else {
-                p.spigot().sendMessage(MineDown.parse("&cVocê não pode dar itens em um evento que os jogadores podem entrar com itens próprios."));
+                p.spigot().sendMessage(
+                        MineDown.parse("&cColoque um item na sua mão."));
             }
         } else {
             p.spigot().sendMessage(MineDown.parse("&cNão existe nenhum evento iniciado no momento."));
@@ -478,16 +525,23 @@ public class GenericEvent {
                         if (ev.getAmarelo().contains(participantes)) {
                             if (!p.getInventory().getItemInMainHand().getType().equals(Material.AIR)) {
                                 participantes.getInventory().addItem(p.getInventory().getItemInMainHand());
-                                participantes.spigot().sendMessage(MineDown.parse("&aVocê recebeu um item do evento: &f" + p.getInventory().getItemInMainHand().getItemMeta().getDisplayName()));
+                                participantes.spigot().sendMessage(
+                                        MineDown.parse("&aVocê recebeu um item do evento: &f"
+                                                + p.getInventory().getItemInMainHand()
+                                                .getItemMeta().getDisplayName()));
                             } else {
-                                p.spigot().sendMessage(MineDown.parse("&cColoque um item na sua mão para dar no evento."));
+                                p.spigot().sendMessage(
+                                        MineDown.parse("&cColoque um item na sua mão."));
                             }
                         }
                     }
                 }
-                p.spigot().sendMessage(MineDown.parse("&aVocê deu um item para os jogadores do evento: &f" + p.getInventory().getItemInMainHand().getItemMeta().getDisplayName()));
+                p.spigot().sendMessage(
+                        MineDown.parse("&aVocê deu um item para os jogadores do evento: &f"
+                                + p.getInventory().getItemInMainHand().getItemMeta().getDisplayName()));
             } else {
-                p.spigot().sendMessage(MineDown.parse("&cVocê não pode dar itens em um evento que os jogadores podem entrar com itens próprios."));
+                p.spigot().sendMessage(
+                        MineDown.parse("&cVocê não pode dar itens em um evento com itens próprios."));
             }
         } else {
             p.spigot().sendMessage(MineDown.parse("&cNão existe nenhum evento iniciado no momento."));
@@ -504,7 +558,8 @@ public class GenericEvent {
                         return;
                     }
                     ev.setPremioMoney(value);
-                    p.spigot().sendMessage(MineDown.parse("&aVocê adicionou " + ev.getPremioMoney() + " money como prêmio."));
+                    p.spigot().sendMessage(MineDown.parse("&aVocê adicionou "
+                            + ev.getPremioMoney() + " money como prêmio."));
                 } catch (NumberFormatException e) {
                     p.spigot().sendMessage(MineDown.parse("&cUso correto: /evento premio <valor>"));
                 }
@@ -617,12 +672,15 @@ public class GenericEvent {
             }
             if (ev.isTeam()) {
                 p.spigot().sendMessage(MineDown.parse("&aTime Verde"));
-                ev.getVerde().forEach(pv -> p.spigot().sendMessage(MineDown.parse("&f" + pv.getName())));
+                ev.getVerde().forEach(pv ->
+                        p.spigot().sendMessage(MineDown.parse("&f" + pv.getName())));
                 p.spigot().sendMessage(MineDown.parse("&eTime Amarelo"));
-                ev.getAmarelo().forEach(pv -> p.spigot().sendMessage(MineDown.parse("&f" + pv.getName())));
+                ev.getAmarelo().forEach(pv ->
+                        p.spigot().sendMessage(MineDown.parse("&f" + pv.getName())));
             } else {
                 p.spigot().sendMessage(MineDown.parse("&bParticipantes:"));
-                ev.getParticipantes().forEach(pv -> p.spigot().sendMessage(MineDown.parse("&f" + pv.getName())));
+                ev.getParticipantes().forEach(pv ->
+                        p.spigot().sendMessage(MineDown.parse("&f" + pv.getName())));
             }
             p.spigot().sendMessage(MineDown.parse(" "));
         } else {
@@ -636,10 +694,12 @@ public class GenericEvent {
             if (!ev.isIniciado()) {
                 if (!ev.isInv()) {
                     ev.setInv(true);
-                    p.spigot().sendMessage(MineDown.parse("&cAgora os jogadores podem entrar no evento com itens próprios."));
+                    p.spigot().sendMessage(
+                            MineDown.parse("&cOs jogadores poderão entrar com itens próprios."));
                 } else {
                     ev.setInv(false);
-                    p.spigot().sendMessage(MineDown.parse("&cAgora os jogadores não podem entrar no evento com itens próprios."));
+                    p.spigot().sendMessage(
+                            MineDown.parse("&cOs jogadores não poderão entrar com itens próprios."));
                 }
             } else {
                 p.spigot().sendMessage(MineDown.parse("&cO evento já se iniciou!"));
@@ -655,10 +715,12 @@ public class GenericEvent {
             if (!ev.isIniciado()) {
                 if (!ev.isTeam()) {
                     ev.setTeam(true);
-                    p.spigot().sendMessage(MineDown.parse("&cOs jogadores serão dividos em dois times quando o evento for trancado."));
+                    p.spigot().sendMessage(
+                            MineDown.parse("&cVocê selecionou o evento como tipo TIME vs TIME"));
                 } else {
                     ev.setTeam(false);
-                    p.spigot().sendMessage(MineDown.parse("&cOs jogadores estão em modo de jogo individual agora."));
+                    p.spigot().sendMessage(
+                            MineDown.parse("&cVocê selecionou o evento como tipo individual"));
                 }
             } else {
                 p.spigot().sendMessage(MineDown.parse("&cO evento já se iniciou!"));
@@ -690,7 +752,8 @@ public class GenericEvent {
                 ev.setTeamPvP(true);
                 for (Player all : Bukkit.getOnlinePlayers()) {
                     if (ev.getParticipantes().contains(all)) {
-                        all.spigot().sendMessage(MineDown.parse("&cO PvP no time foi ativado no evento."));
+                        all.spigot().sendMessage(
+                                MineDown.parse("&cO PvP no time foi ativado no evento."));
                     }
                 }
                 p.spigot().sendMessage(MineDown.parse("&cO PvP no time foi ativado no evento."));
@@ -698,7 +761,8 @@ public class GenericEvent {
                 ev.setTeamPvP(false);
                 for (Player all : Bukkit.getOnlinePlayers()) {
                     if (ev.getParticipantes().contains(all)) {
-                        all.spigot().sendMessage(MineDown.parse("&cO PvP no time foi desativado no evento."));
+                        all.spigot().sendMessage(
+                                MineDown.parse("&cO PvP no time foi desativado no evento."));
                     }
                 }
                 p.spigot().sendMessage(MineDown.parse("&cO PvP no time foi desativado no evento."));
@@ -753,7 +817,8 @@ public class GenericEvent {
             if (!ev.isTrancado()) {
                 if (!ev.isInv()) {
                     if (!p.getInventory().isEmpty()) {
-                        p.spigot().sendMessage(MineDown.parse("&cLimpe o seu inventário para entrar nesse evento."));
+                        p.spigot().sendMessage(
+                                MineDown.parse("&cLimpe o seu inventário para entrar nesse evento."));
                     } else {
                         ev.getParticipantes().add(p);
                         p.teleport(ev.getEntrada());

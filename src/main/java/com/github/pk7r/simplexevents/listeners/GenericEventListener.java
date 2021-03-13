@@ -16,13 +16,14 @@ public class GenericEventListener implements Listener {
 
     @EventHandler
     public void onDeath(PlayerDeathEvent e) {
-        if (ev.getParticipantes().contains(e.getEntity())) {
+        Player p = e.getEntity();
+        if (ev.getParticipantes().contains(p)) {
             if (!ev.isInv()) {
-                e.getEntity().getInventory().clear();
+                p.getInventory().clear();
             }
-            e.getEntity().spigot().sendMessage(MineDown.parse("&cVocê foi desclassificado do evento."));
+            p.spigot().sendMessage(MineDown.parse("&cVocê foi desclassificado do evento."));
             e.setKeepLevel(true);
-            ev.getParticipantes().remove(e.getEntity());
+            ev.getParticipantes().remove(p);
         }
     }
 
@@ -34,8 +35,12 @@ public class GenericEventListener implements Listener {
                 e.setCancelled(false);
                 return;
             }
-            if (e.getMessage().startsWith("/c") || e.getMessage().startsWith("/g")) {
-                e.setCancelled(false);
+            if (e.getMessage().startsWith("/c")
+                    || e.getMessage().startsWith("/g")
+                    || e.getMessage().startsWith("/s")
+                    || e.getMessage().startsWith("/evento info")
+                    || e.getMessage().startsWith("/evento sair")) {
+                    e.setCancelled(false);
                 return;
             }
             p.spigot().sendMessage(MineDown.parse("&cVocê não pode usar comandos no evento!"));
@@ -45,22 +50,29 @@ public class GenericEventListener implements Listener {
 
     @EventHandler
     public void onCombat(EntityDamageByEntityEvent e) {
+
         if ((e.getEntity() instanceof Player) && (e.getDamager() instanceof Player)) {
-            if (ev.getParticipantes().contains(e.getEntity()) && ev.getParticipantes().contains(e.getDamager())) {
+            if (ev.getParticipantes().contains(((Player) e.getEntity()).getPlayer())
+                    && ev.getParticipantes().contains(((Player) e.getDamager()).getPlayer())) {
                 if (!ev.isPvP()) {
                     e.setCancelled(true);
-                    e.getDamager().spigot().sendMessage(MineDown.parse("&cO PvP está desativado no evento!"));
+                    e.getDamager().spigot().sendMessage(
+                            MineDown.parse("&cO PvP está desativado no evento!"));
                     return;
                 }
                 if (ev.isTeam()) {
                     if (!ev.isTeamPvP()) {
-                        if (ev.getVerde().contains(e.getEntity()) && ev.getVerde().contains(e.getDamager())) {
+                        if (ev.getVerde().contains(((Player) e.getEntity()).getPlayer())
+                                && ev.getVerde().contains(((Player) e.getDamager()).getPlayer())) {
                             e.setCancelled(true);
-                            e.getDamager().spigot().sendMessage(MineDown.parse("&cJogadores do mesmo time não podem se bater!"));
+                            e.getDamager().spigot().sendMessage(
+                                    MineDown.parse("&cJogadores do mesmo time não podem se bater!"));
                         }
-                        if (ev.getAmarelo().contains(e.getEntity()) && ev.getAmarelo().contains(e.getDamager())) {
+                        if (ev.getAmarelo().contains(((Player) e.getEntity()).getPlayer())
+                                && ev.getAmarelo().contains(((Player) e.getDamager()).getPlayer())) {
                             e.setCancelled(true);
-                            e.getDamager().spigot().sendMessage(MineDown.parse("&cJogadores do mesmo time não podem se bater!"));
+                            e.getDamager().spigot().sendMessage(
+                                    MineDown.parse("&cJogadores do mesmo time não podem se bater!"));
                         }
                     }
                 }

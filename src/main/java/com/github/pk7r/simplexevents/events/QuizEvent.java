@@ -1,6 +1,7 @@
 package com.github.pk7r.simplexevents.events;
 
 import com.github.pk7r.simplexevents.Main;
+import com.github.pk7r.simplexevents.model.QuizEventModel;
 import com.github.pk7r.simplexevents.utils.QuizEventPattern;
 import de.themoep.minedown.MineDown;
 import org.bukkit.Bukkit;
@@ -12,6 +13,8 @@ import org.bukkit.scheduler.BukkitTask;
 
 public class QuizEvent {
 
+    private final QuizEventModel ev = Main.getQuizEventModel();
+    
     public void onDefault(CommandSender s) {
         Player p = (Player) s;
         if (p.hasPermission("simplexevents.quiz.admin")) {
@@ -38,45 +41,49 @@ public class QuizEvent {
             p.spigot().sendMessage(MineDown.parse("&cUso correto: /quiz iniciar <pergunta>"));
             return;
         }
-        if (Main.getQuizEventModel().getResposta().equalsIgnoreCase("")) {
+        if (ev.getResposta().equalsIgnoreCase("")) {
             p.spigot().sendMessage(MineDown.parse("&cDefina uma resposta antes de iniciar!"));
             return;
         }
-        if (!Main.getQuizEventModel().getResposta().equalsIgnoreCase("")) {
-            Main.getQuizEventModel().setAberto(true);
+        if (!ev.getResposta().equalsIgnoreCase("")) {
+            ev.setAberto(true);
             StringBuilder builder = new StringBuilder();
             for (String arg : args) {
                 builder.append(arg).append(" ");
             }
-            Main.getQuizEventModel().setPergunta(builder.toString().trim());
-            if (Main.getQuizEventModel().isAberto()) {
+            ev.setPergunta(builder.toString().trim());
+            if (ev.isAberto()) {
                 BukkitTask task = new BukkitRunnable() {
                     @Override
                     public void run() {
                         Bukkit.spigot().broadcast(MineDown.parse(""));
                         Bukkit.spigot().broadcast(MineDown.parse("&e&lNovo Quiz!"));
                         Bukkit.spigot().broadcast(MineDown.parse(""));
-                        Bukkit.spigot().broadcast(MineDown.parse("&d" + Main.getQuizEventModel().getPergunta()));
+                        Bukkit.spigot().broadcast(MineDown.parse("&d" + ev.getPergunta()));
                         Bukkit.spigot().broadcast(MineDown.parse(""));
-                        if (Main.getQuizEventModel().getPremioMoney() != 0 && !Main.getQuizEventModel().getPremioItem().getType().equals(Material.AIR)) {
-                            Bukkit.spigot().broadcast(MineDown.parse("&bPrêmios: &f" + Main.getQuizEventModel().getPremioMoney() + " money &be &f "
-                                    + Main.getQuizEventModel().getPremioItem().getItemMeta().getDisplayName()));
+                        if (ev.getPremioMoney() != 0 && !ev.getPremioItem().getType().equals(Material.AIR)) {
+                            Bukkit.spigot().broadcast(MineDown.parse("&bPrêmios: &f" +
+                                    ev.getPremioMoney() + " money &be &f "
+                                    + ev.getPremioItem().getItemMeta().getDisplayName()));
                         }
-                        if (Main.getQuizEventModel().getPremioMoney() != 0 && Main.getQuizEventModel().getPremioItem().getType().equals(Material.AIR)) {
-                            Bukkit.spigot().broadcast(MineDown.parse("&bPrêmio: &f" + Main.getQuizEventModel().getPremioMoney() + " money"));
+                        if (ev.getPremioMoney() != 0 && ev.getPremioItem().getType().equals(Material.AIR)) {
+                            Bukkit.spigot().broadcast(MineDown.parse("&bPrêmio: &f" +
+                                    ev.getPremioMoney() + " money"));
                         }
-                        if (Main.getQuizEventModel().getPremioMoney() == 0 && !Main.getQuizEventModel().getPremioItem().getType().equals(Material.AIR)) {
-                            Bukkit.spigot().broadcast(MineDown.parse("&bPrêmio: &f" + Main.getQuizEventModel().getPremioItem().getItemMeta().getLocalizedName()));
+                        if (ev.getPremioMoney() == 0 && !ev.getPremioItem().getType().equals(Material.AIR)) {
+                            Bukkit.spigot().broadcast(MineDown.parse("&bPrêmio: &f" +
+                                    ev.getPremioItem().getItemMeta().getLocalizedName()));
                         }
-                        if (Main.getQuizEventModel().getPremioMoney() == 0 && Main.getQuizEventModel().getPremioItem().getType().equals(Material.AIR)) {
+                        if (ev.getPremioMoney() == 0 && ev.getPremioItem().getType().equals(Material.AIR)) {
                             Bukkit.spigot().broadcast(MineDown.parse("&bPrêmio: &fNenhum!"));
                         }
                         Bukkit.broadcastMessage("");
-                        Bukkit.spigot().broadcast(MineDown.parse("&b[[Responder]](suggest_command=/resposta )"));
+                        Bukkit.spigot().broadcast(
+                                MineDown.parse("&b[[Responder]](suggest_command=/resposta )"));
                         Bukkit.broadcastMessage("");
                     }
                 }.runTaskTimer(Main.getMain(), 1L, 60 * 20);
-                Main.getQuizEventModel().setTask(task);
+                ev.setTask(task);
             } else {
                 p.spigot().sendMessage(MineDown.parse("&cJá existe um quiz acontecendo no momento."));
             }
@@ -89,14 +96,14 @@ public class QuizEvent {
             p.spigot().sendMessage(MineDown.parse("&cUso correto: /quiz setresposta <resposta>"));
             return;
         }
-        if (!Main.getQuizEventModel().isAberto()) {
+        if (!ev.isAberto()) {
             StringBuilder builder = new StringBuilder();
             for (String arg : args) {
                 builder.append(arg).append(" ");
             }
-            Main.getQuizEventModel().setResposta(builder.toString().trim());
+            ev.setResposta(builder.toString().trim());
                 p.spigot().sendMessage(MineDown.parse("&aResposta definida com sucesso!"));
-                p.spigot().sendMessage(MineDown.parse("&eResposta Atual: &f" + Main.getQuizEventModel().getResposta()));
+                p.spigot().sendMessage(MineDown.parse("&eResposta Atual: &f" + ev.getResposta()));
         } else {
             p.spigot().sendMessage(MineDown.parse("&cJá existe um quiz acontecendo no momento."));
         }
@@ -115,42 +122,42 @@ public class QuizEvent {
 
     public void setMoneyAward(CommandSender s, int valor) {
         Player p = (Player) s;
-        if (Main.getQuizEventModel().isAberto()) {
+        if (ev.isAberto()) {
             p.spigot().sendMessage(MineDown.parse("&cJá existe um quiz acontecendo no momento!"));
             return;
         }
         try {
-            if (Main.getQuizEventModel().getPremioMoney() < 0.0) {
+            if (ev.getPremioMoney() < 0.0) {
                 p.sendMessage("§cO valor deve ser maior que 0!");
                 return;
             }
-            Main.getQuizEventModel().setPremioMoney(valor);
+            ev.setPremioMoney(valor);
         } catch (NumberFormatException e) {
             p.spigot().sendMessage(MineDown.parse("&cUso correto: /quiz setpremio <valor>"));
             return;
         }
             p.spigot().sendMessage(MineDown.parse("&aPremio em dinheiro do quiz setado" +
-                    " para &f" + Main.getQuizEventModel().getPremioMoney() + " money &acom sucesso!"));
+                    " para &f" + ev.getPremioMoney() + " money &acom sucesso!"));
     }
 
     public void setItemAward(CommandSender s) {
         Player p = (Player) s;
-        if (Main.getQuizEventModel().isAberto()) {
+        if (ev.isAberto()) {
             p.spigot().sendMessage(MineDown.parse("&cJá existe um quiz acontecendo no momento!"));
             return;
         }
         try {
-            if (Main.getQuizEventModel().getPremioItem().getType().equals(Material.AIR)) {
+            if (ev.getPremioItem().getType().equals(Material.AIR)) {
                 p.sendMessage("§cSegure um item na mão para adicionar como prêmio!");
                 return;
             }
-            Main.getQuizEventModel().setPremioItem(p.getInventory().getItemInMainHand());
+            ev.setPremioItem(p.getInventory().getItemInMainHand());
         } catch (Exception e) {
             e.printStackTrace();
             return;
         }
         p.spigot().sendMessage(MineDown.parse("&aPremio em item do quiz setado" +
-                " para &f" + Main.getQuizEventModel().getPremioItem().getItemMeta().getDisplayName() + " &acom sucesso!"));
+                " para &f" + ev.getPremioItem().getItemMeta().getDisplayName() + " &acom sucesso!"));
     }
 
     public void onAnswer(CommandSender s, String[] args) {
@@ -159,41 +166,44 @@ public class QuizEvent {
             p.spigot().sendMessage(MineDown.parse("&cUso correto: /resposta <resposta>"));
             return;
         }
-        if (!Main.getQuizEventModel().getPergunta().equalsIgnoreCase("")) {
+        if (!ev.getPergunta().equalsIgnoreCase("")) {
             final StringBuilder sb = new StringBuilder("");
             sb.append(args[0]);
             for (int i = 1; i < args.length; ++i) {
                 sb.append(" ");
                 sb.append(args[i]);
             }
-            if (Main.getQuizEventModel().getResposta().equalsIgnoreCase(sb.toString())) {
-                Main.getQuizEventModel().setAberto(false);
+            if (ev.getResposta().equalsIgnoreCase(sb.toString())) {
+                ev.setAberto(false);
                 Bukkit.spigot().broadcast(MineDown.parse(""));
                 Bukkit.spigot().broadcast(MineDown.parse("&e&lQuiz Finalizado!"));
                 Bukkit.spigot().broadcast(MineDown.parse(""));
-                Bukkit.spigot().broadcast(MineDown.parse("&dPergunta: &f" + Main.getQuizEventModel().getPergunta()));
+                Bukkit.spigot().broadcast(MineDown.parse("&dPergunta: &f" + ev.getPergunta()));
                 Bukkit.spigot().broadcast(MineDown.parse(""));
-                Bukkit.spigot().broadcast(MineDown.parse("&dResposta: &f" + Main.getQuizEventModel().getResposta()));
+                Bukkit.spigot().broadcast(MineDown.parse("&dResposta: &f" + ev.getResposta()));
                 Bukkit.spigot().broadcast(MineDown.parse(""));
                 Bukkit.spigot().broadcast(MineDown.parse("&bVencedor: &f" + p.getName()));
-                if (Main.getQuizEventModel().getPremioMoney() != 0 && !Main.getQuizEventModel().getPremioItem().getType().equals(Material.AIR)) {
-                    Bukkit.spigot().broadcast(MineDown.parse("&bPrêmios: &f" + Main.getQuizEventModel().getPremioMoney() + " money &be &f "
-                            + Main.getQuizEventModel().getPremioItem().getItemMeta().getDisplayName()));
+                if (ev.getPremioMoney() != 0 && !ev.getPremioItem().getType().equals(Material.AIR)) {
+                    Bukkit.spigot().broadcast(MineDown.parse("&bPrêmios: &f"
+                            + ev.getPremioMoney() + " money &be &f "
+                            + ev.getPremioItem().getItemMeta().getDisplayName()));
                 }
-                if (Main.getQuizEventModel().getPremioMoney() != 0 && Main.getQuizEventModel().getPremioItem().getType().equals(Material.AIR)) {
-                    Bukkit.spigot().broadcast(MineDown.parse("&bPrêmio: &f" + Main.getQuizEventModel().getPremioMoney() + " money"));
+                if (ev.getPremioMoney() != 0 && ev.getPremioItem().getType().equals(Material.AIR)) {
+                    Bukkit.spigot().broadcast(MineDown.parse("&bPrêmio: &f"
+                            + ev.getPremioMoney() + " money"));
                 }
-                if (Main.getQuizEventModel().getPremioMoney() == 0 && !Main.getQuizEventModel().getPremioItem().getType().equals(Material.AIR)) {
-                    Bukkit.spigot().broadcast(MineDown.parse("&bPrêmio: &f" + Main.getQuizEventModel().getPremioItem().getItemMeta().getLocalizedName()));
+                if (ev.getPremioMoney() == 0 && !ev.getPremioItem().getType().equals(Material.AIR)) {
+                    Bukkit.spigot().broadcast(MineDown.parse("&bPrêmio: &f"
+                            + ev.getPremioItem().getItemMeta().getLocalizedName()));
                 }
-                if (Main.getQuizEventModel().getPremioMoney() == 0 && Main.getQuizEventModel().getPremioItem().getType().equals(Material.AIR)) {
+                if (ev.getPremioMoney() == 0 && ev.getPremioItem().getType().equals(Material.AIR)) {
                     Bukkit.spigot().broadcast(MineDown.parse("&bPrêmio: &fNenhum!"));
                 }
-                if (!Main.getQuizEventModel().getPremioItem().getType().equals(Material.AIR)) {
-                    p.getInventory().addItem(Main.getQuizEventModel().getPremioItem());
+                if (!ev.getPremioItem().getType().equals(Material.AIR)) {
+                    p.getInventory().addItem(ev.getPremioItem());
                 }
-                if (Main.getQuizEventModel().getPremioMoney() != 0) {
-                    Main.getEcon().depositPlayer(p, Main.getQuizEventModel().getPremioMoney());
+                if (ev.getPremioMoney() != 0) {
+                    Main.getEcon().depositPlayer(p, ev.getPremioMoney());
                 }
                 Bukkit.spigot().broadcast(MineDown.parse(""));
                 QuizEventPattern.setDefault();

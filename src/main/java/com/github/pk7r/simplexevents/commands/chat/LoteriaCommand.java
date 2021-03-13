@@ -10,7 +10,7 @@ import org.bukkit.command.CommandSender;
 public class LoteriaCommand extends BaseCommand {
 
     @Default
-    public void betOnLoterry(CommandSender s, String[] args) {
+    public void loterryCommand(CommandSender s, String[] args) {
         try {
             LoteriaService.onLoterry(s, args);
         } catch (Exception e) {

@@ -39,7 +39,7 @@ public class ChatEvent {
         Player p = (Player) s;
         if (args.length == 1) {
             try {
-                BolaoService.iniciar(Integer.parseInt(args[0]));
+                BolaoService.run(Integer.parseInt(args[0]));
             } catch (NumberFormatException e) {
                 p.spigot().sendMessage(MineDown.parse("&cUso correto: /evchat bolao <aposta>"));
                 p.spigot().sendMessage(MineDown.parse("&cExemplo: /evchat bolao 1000"));
@@ -54,7 +54,7 @@ public class ChatEvent {
         Player p = (Player) s;
         if (args.length == 1) {
             try {
-                LoteriaService.iniciar(Integer.parseInt(args[0]));
+                LoteriaService.run(Integer.parseInt(args[0]));
                 p.spigot().sendMessage(MineDown.parse("&aNúmero correto: &f" + Main.getChatEventModel().getLoteriaNumeroCorreto()));
             } catch (NumberFormatException e) {
                 p.spigot().sendMessage(MineDown.parse("&cUso correto: /evchat loteria <premio>"));
@@ -70,7 +70,7 @@ public class ChatEvent {
         Player p = (Player) s;
         if (args.length == 1) {
             try {
-                SpeedchatService.iniciar(Integer.parseInt(args[0]));
+                SpeedchatService.run(Integer.parseInt(args[0]));
             } catch (NumberFormatException e) {
                 p.spigot().sendMessage(MineDown.parse("&cUso correto: /evchat speedchat <premio>"));
                 p.spigot().sendMessage(MineDown.parse("&cExemplo: /evchat speedchat 1000"));
@@ -87,6 +87,6 @@ public class ChatEvent {
     }
 
     public void onSorteioEvent(CommandSender s) {
-        SorteioService.iniciar();
+        SorteioService.run();
     }
 }

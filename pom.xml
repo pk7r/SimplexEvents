@@ -6,7 +6,7 @@
 
     <groupId>com.github.pk7r</groupId>
     <artifactId>SimplexEvents</artifactId>
-    <version>1.4.8</version>
+    <version>1.5.1</version>
     <packaging>jar</packaging>
 
     <name>SimplexEvents</name>
@@ -38,15 +38,15 @@
                     <relocations>
                         <relocation>
                             <pattern>co.aikar.commands</pattern>
-                            <shadedPattern>com.github.pk7r.simplexevents.lib.acf</shadedPattern>
+                            <shadedPattern>com.github.pk7r.simplexevents.acf</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>co.aikar.locales</pattern>
-                            <shadedPattern>com.github.pk7r.simplexevents.lib.locales</shadedPattern>
+                            <shadedPattern>com.github.pk7r.simplexevents.locales</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>de.themoep.minedown</pattern>
-                            <shadedPattern>com.github.pk7r.simplexevents.lib.minedown</shadedPattern>
+                            <shadedPattern>com.github.pk7r.simplexevents.minedown</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>

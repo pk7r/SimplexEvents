@@ -9,6 +9,7 @@ public class SECommand extends BaseCommand {
 
     @CommandAlias("simplexevents|se")
     public void simplexEventsCommand(Player p) {
+
         p.spigot().sendMessage(MineDown.parse(""));
         p.spigot().sendMessage(MineDown.parse("&e&lSimplexEvents - Ajuda"));
         p.spigot().sendMessage(MineDown.parse(""));
@@ -19,4 +20,5 @@ public class SECommand extends BaseCommand {
         p.spigot().sendMessage(MineDown.parse(""));
 
     }
+
 }
